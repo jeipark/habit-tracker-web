@@ -1,38 +1,181 @@
-.App {
+/*
+.habit-list, .habit-item, .week-row, .day-box, .day-box-completed, .add-habit, .app, input
+*/
+
+/* Container for the entire app */
+.app {
+  display: flex;
+  flex-direction: column;
+  padding: 16px 30px;
+  background-color: #fff;
+  min-height: 100vh;
+  width: clamp(400px, 100%, 400px);
+  margin: 0 auto;
+  color: #3a3167;
+}
+
+/* Title styling */
+.title {
+  font-size: 30px;
+  font-weight: bold;
+  margin-bottom: 12px;
+  padding-top: 40px;
+}
+
+/* Input row container */
+.add-habit {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 32px;
+  align-items: center;
+}
+
+/* Input field styling */
+.input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+  margin-right: 10px;
+}
+
+/* Button styling */
+.button {
+  padding: 10px 20px;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.button:hover {
+  background-color: #2e2554;
+}
+
+/* habit list container */
+.habit-list {
+  margin-top: 20px;
+}
+
+/* Individual habit item */
+.habit-item {
+  margin-bottom: 20px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.habit-item.completed {
+  opacity: 0.5;
+}
+
+.habit-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.habit-title {
+  font-size: 18px;
+  font-weight: 400;
+  margin: 0;
+  padding: 0;
+}
+
+.habit-item.habit-item.completed .habit-title {
+  text-decoration: line-through;
+}
+
+/* Week row container */
+.week-row {
+  display: flex;
+  gap: 5px;
+  margin-top: 10px;
+  justify-content: center;
+}
+
+/* Day box styling */
+.day-box {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  background-color: #fff;
+  text-align: center;
+  line-height: 32px;
+  cursor: pointer; 
+  font-weight: bold;
+  font-size: 12px;
+  color: #bbb;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.day-box-completed {
+  background-color: #ffffff;
+  border-color: #29C48D;
+  border-width: 3px;
+  color: #29C48D;
+}
+
+.completed-list {
+  margin-top: 4rem;
+}
+
+.completed-title {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.habit-item.completed {
+  padding: 10px 20px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+/* Delete all completed button */
+.delete-completed {
+  color: #ff7171;
+  margin-left: 20px;
+  font-size: 16px;
+  cursor: pointer;
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  align-items: center;
+  border: none;
+  background: none;
+  gap: 10px;
+  font-weight: 400;
 }
 
-.App-link {
-  color: #61dafb;
+.checkmark {
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  color: #ccc;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Active state (habit not yet completed) */
+.habit-item.completed .checkmark {
+  color: #29C48D;
+}
+
+.add-icon {
+  color: #29c49d;
+  font-size: 32px;
+}
+
+.delete-icon {
+  color: #ff7171;
+  font-size: 20px;
+}
+
+button {
+  background: none;
+  border: none;
 }
