@@ -91,7 +91,6 @@ const App = () => {
   return (
     <div className="app">
       <h1 className="title">Habit Tracker</h1>
-
       <div className="add-habit">
         <input
           className="input"
@@ -101,7 +100,7 @@ const App = () => {
             if (e.key === 'Enter') {
               addHabit(e.target.value);
               e.target.value = '';
-            }
+         }
           }}
         />
         <button
@@ -113,7 +112,7 @@ const App = () => {
           }}>
             <ion-icon name="add-circle" className="add-icon" />
           </button>
-        
+       
       </div>
 
       <DragDropContext onDragEnd={onDragEnd}>
@@ -129,7 +128,9 @@ const App = () => {
                 <Draggable key={habit.id} draggableId={habit.id} index={index}>
                   {(provided) => (
                     <div
-                      className={`habit-item ${habit.completed ? 'completed' : 'not-completed'}`}
+                      className={`habit-item ${habit.completed ? 'habit-item--completed' : ''} ${
+                        habit.weekProgress.every((day) => day) ? 'habit-item--finished' : ''
+                      }`}
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
@@ -151,8 +152,8 @@ const App = () => {
                           <button
                             key={dayIndex}
                             onClick={() => toggleDay(index, dayIndex)}
-                            className={`day-box ${
-                              habit.weekProgress[dayIndex] ? 'day-box-completed' : ''
+                            className={`day ${
+                              habit.weekProgress[dayIndex] ? 'day--completed' : ''
                             }`}
                           >
                             {day}
@@ -164,12 +165,13 @@ const App = () => {
                 </Draggable>
               ))}
               {provided.placeholder}
-              {/* Completed Habits */}
+
+              {/* Deleted Habits */}
               {completedHabits.length > 0 && (
-                <div className="completed-list">
-                  <h3 className="completed-title">Completed Habits</h3>
+                <div className="deleted-list">
+                  <h3 className="deleted-title">Completed</h3>
                   {completedHabits.map((habit) => (
-                    <div key={habit.id} className="habit-item completed">
+                    <div key={habit.id} className="habit-item habit-item--deleted">
                       <div className="habit-header">
                         <p className="habit-title completed">{habit.name}</p>
                         <button onClick={() => toggleCompleted(habit.id)} className="checkmark completed">
