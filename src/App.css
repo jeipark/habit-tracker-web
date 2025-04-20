@@ -86,6 +86,19 @@
   padding: 0;
 }
 
+.habit-title input {
+  font-size: 16px;
+  padding: 4px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+}
+
+.habit-title span {
+  cursor: pointer;
+  font-size: 16px;
+}
+
 .habit-item.habit-item--deleted .habit-title {
   text-decoration: line-through;
 }

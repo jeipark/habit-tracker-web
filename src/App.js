@@ -4,11 +4,20 @@ import confetti from 'canvas-confetti';
 import './App.css';
 
 const App = () => {
+  // State to hold the list of habits
+  // The initial state is loaded from local storage if available
+  // Otherwise, it starts with an empty array
   const [habits, setHabits] = useState( () => {
     const stored = localStorage.getItem('habits');
     return stored ? JSON.parse(stored) : [];
   });
 
+  const [editingId, setEditingId] = useState(null); // Track the habit being edited
+  const [tempTitle, setTempTitle] = useState(''); // Temporary title for editing
+
+  // Load habits from local storage on initial render
+  // and save habits to local storage whenever they change
+  // This allows the app to persist habits even after a page refresh
   useEffect(() => {
     localStorage.setItem('habits', JSON.stringify(habits));
   }, [habits]);
@@ -16,6 +25,11 @@ const App = () => {
   const days = ['M', 'T', 'W', 'Th', 'F', 'S', 'Su'];
   const isHabitComplete = (habit) => habit.weekProgress.every((done) => done);
 
+  // Function to toggle the completion of a habit for a specific day
+  // and check if the habit is fully completed
+  // If it is, trigger confetti
+  // and mark the habit as completed
+  // If it is not, mark the habit as not completed
   const toggleDay = (index, dayIndex) => {
     const updatedHabits = habits.map((habit, i) => {
       if (i === index) {
@@ -31,6 +45,7 @@ const App = () => {
     const wasComplete = habits[index].weekProgress.every((done) => done);
     const nowComplete = justCompleted.weekProgress.every((done) => done);
   
+    // Trigger confetti if the habit just became fully completed
     if (!wasComplete && nowComplete) {
       confetti({
         particleCount: 100,
@@ -68,6 +83,25 @@ const App = () => {
     ]);
   };
 
+  const startEditing = (id, currentTitle) => {
+    setEditingId(id); // Set the habit ID being edited
+    setTempTitle(currentTitle); // Set the current title in the temporary state
+  };
+
+  const saveTitle = (id) => {
+    const updatedHabits = habits.map(habit =>
+      habit.id === id ? { ...habit, name: tempTitle } : habit
+    );
+    setHabits(updatedHabits); // Update the habits state
+    setEditingId(null); // Exit editing mode
+  };
+
+  const cancelEditing = () => {
+    setEditingId(null); // Exit editing mode without saving
+    setTempTitle(''); // Clear the temporary title
+  };
+
+  // Function to handle the drag and drop functionality
   const onDragEnd = (result) => {
     const { source, destination } = result;
     if (!destination) return;
@@ -79,6 +113,9 @@ const App = () => {
     setHabits(reordered);
   };
 
+  // Filter out completed habits for the active list
+  // and keep completed habits for the deleted list
+  // and allow users to delete them
   const activeHabits = habits.filter(habit => !habit.completed);
   const completedHabits = habits.filter(habit => habit.completed);
   const toggleCompleted = (id) => {
@@ -136,9 +173,23 @@ const App = () => {
                       {...provided.dragHandleProps}
                     >
                       <div className="habit-header">
-                        <p className="habit-title">
-                          {habit.name}
-                        </p>
+                        <div className="habit-title">
+                          {editingId === habit.id ? (
+                            <input
+                              type="text"
+                              value={tempTitle}
+                              onChange={(e) => setTempTitle(e.target.value)} // Update tempTitle as the user types
+                              onBlur={() => saveTitle(habit.id)} // Save the title when the input loses focus
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter') saveTitle(habit.id); // Save on Enter key
+                                if (e.key === 'Escape') cancelEditing(); // Cancel on Escape key
+                              }}
+                              autoFocus
+                            />
+                          ) : (
+                            <span onClick={() => startEditing(habit.id, habit.name)}>{habit.name}</span> // Start editing on click
+                          )}
+                        </div>
                         <button
                           className={`checkmark ${habit.completed ? 'active' : 'inactive'}`}
                           onClick={() => toggleComplete(habit.id)}
@@ -182,7 +233,7 @@ const App = () => {
                         </button>
                       </div>
                     </div>
-                  ))}                  
+                  ))}
                 </div>
               )}
             </div>
